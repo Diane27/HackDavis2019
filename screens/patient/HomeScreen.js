@@ -12,10 +12,11 @@ import moment from 'moment';
 
 import styles from '../../styles/home.scss';
 import HomeCard from '../../components/HomeCard.js';
+import HeaderTitle from '../../components/HeaderTitle.js';
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
-    title: 'CareBuddy',
+    headerTitle: <HeaderTitle/>
   };
 
   state = {

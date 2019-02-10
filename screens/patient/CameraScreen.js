@@ -1,9 +1,10 @@
 import React from 'react';
 import CameraComponent from '../../components/CameraComponent';
+import HeaderTitle from '../../components/HeaderTitle.js';
 
 export default class CameraScreen extends React.Component {
   static navigationOptions = {
-    title: 'CareBuddy',
+    headerTitle: <HeaderTitle/>
   };
 
   render() {

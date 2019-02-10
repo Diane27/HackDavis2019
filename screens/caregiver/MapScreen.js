@@ -1,9 +1,10 @@
 import React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
+import HeaderTitle from '../../components/HeaderTitle.js';
 
 export default class MapScreen extends React.Component {
   static navigationOptions = {
-    title: 'CareBuddy',
+    headerTitle: <HeaderTitle/>
   };
 
   render() {

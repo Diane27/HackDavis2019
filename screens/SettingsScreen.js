@@ -1,9 +1,10 @@
 import React from 'react';
+import HeaderTitle from '../components/HeaderTitle.js';
 import { ExpoConfigView } from '@expo/samples';
 
 export default class SettingsScreen extends React.Component {
   static navigationOptions = {
-    title: 'CareBuddy',
+    headerTitle: <HeaderTitle/>
   };
 
   render() {

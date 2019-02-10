@@ -1,0 +1,15 @@
+%text {
+  font-family: 'nunito-bold';
+  font-size: 30px;
+}
+
+.primary {
+  @extend %text;
+  color: #f492a5;
+  padding-left: 20px;
+}
+
+.secondary {
+  @extend %text;
+  color: #6e82b7;
+}
