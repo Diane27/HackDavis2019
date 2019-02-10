@@ -1,9 +1,9 @@
 import React from 'react';
 import {
+  AsyncStorage,
   Image,
   Platform,
   ScrollView,
-  StyleSheet,
   Text,
   TouchableOpacity,
   View,
@@ -29,6 +29,15 @@ export default class HomeScreen extends React.Component {
 
   componentDidMount() {
     this.props.navigation.setParams({ goToSettings: this._goToSettings });
+    const userId = await AsyncStorage.getItem('userToken');
+    const result = await firebase.firestore().collection('users').doc(userId).get();
+    const name = result.get('name');
+    const nameCard = this.state.cards[0];
+    nameCard.message = name;
+
+    this.setState({
+      cards: [nameCard, ...this.state.cards.slice(1)]
+    });
   }
 
   _goToSettings = () => {
@@ -38,9 +47,9 @@ export default class HomeScreen extends React.Component {
   state = {
     cards: [
       {
-        title: 'hello',
-        message: 'John Smith',
-        subText: ['Age: 71', '\n', 'Caretaker: ', <Text style={{fontFamily: 'nunito-bold'}} key="caretaker">Jane Doe</Text>]
+        title: 'Hello,',
+        message: '',
+        subText: ''
       },
       {
         title: 'Today is',

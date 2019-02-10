@@ -25,6 +25,8 @@ export default class AuthLoadingScreen extends React.Component {
         const result = await firebase.firestore().collection('users').doc(userId).get();
         const role = result.get('role');
 
+        await AsyncStorage.setItem('userId', userId);
+
         if (role === 'caregiver') {
           this.props.navigation.navigate('Caregiver');
         } else {

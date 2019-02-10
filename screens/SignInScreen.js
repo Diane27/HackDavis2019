@@ -77,6 +77,8 @@ export default class SignInScreen extends React.Component {
         spinner: false
       });
 
+      await AsyncStorage.setItem('userId', signin.user.uid);
+
       if (role === 'caregiver') {
         this.props.navigation.navigate('Caregiver');
       } else {

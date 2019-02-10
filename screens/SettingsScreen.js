@@ -11,6 +11,7 @@ export default class SettingsScreen extends React.Component {
 
   _signOut = async () => {
     await firebase.auth().signOut();
+    await AsyncStorage.clear();
     this.props.navigation.navigate('Auth');
   }
 
