@@ -3,6 +3,17 @@ import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { AppLoading, Asset, Font, Icon } from 'expo';
 import AppNavigator from './navigation/AppNavigator';
 
+import * as firebase from 'firebase';
+const config = {
+  apiKey: "AIzaSyBNTO4TgtG5iCqgj1AEdgaKTqA-GY5t36Y",
+  authDomain: "carebuddy-17dd3.firebaseapp.com",
+  databaseURL: "https://carebuddy-17dd3.firebaseio.com",
+  projectId: "carebuddy",
+  storageBucket: "carebuddy.appspot.com",
+  messagingSenderId: "781280855433"
+};
+firebase.initializeApp(config);
+
 export default class App extends React.Component {
   state = {
     isLoadingComplete: false,
