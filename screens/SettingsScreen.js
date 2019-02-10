@@ -1,15 +1,22 @@
 import React from 'react';
 import HeaderTitle from '../components/HeaderTitle.js';
-import { ExpoConfigView } from '@expo/samples';
+import { Button, Text } from 'react-native-elements';
+
+import * as firebase from 'firebase';
 
 export default class SettingsScreen extends React.Component {
   static navigationOptions = {
     headerTitle: <HeaderTitle/>
   };
 
+  _signOut = async () => {
+    await firebase.auth().signOut();
+    this.props.navigation.navigate('Auth');
+  }
+
   render() {
-    /* Go ahead and delete ExpoConfigView and replace it with your
-     * content, we just wanted to give you a quick view of your config */
-    return <ExpoConfigView />;
+    return (
+      <Button title="Sign Out" onPress={this._signOut} />
+    );
   }
 }
