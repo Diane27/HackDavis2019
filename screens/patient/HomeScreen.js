@@ -35,9 +35,13 @@ export default class HomeScreen extends React.Component {
     const name = result.get('name');
     const nameCard = this.state.cards[0];
     nameCard.message = name;
+    const getReminder = await firebase.firestore().collection('reminders').doc(userId).get();
+    const reminder = getReminder.data().reminder;
+    const reminderCard = this.state.cards[2];
+    reminderCard.message = reminder;
 
     this.setState({
-      cards: [nameCard, ...this.state.cards.slice(1)]
+      cards: [nameCard, this.state.cards[1], reminderCard]
     });
   }
 
@@ -59,10 +63,10 @@ export default class HomeScreen extends React.Component {
       },
       {
         title: 'A reminder for you:',
-        message: 'Your caretaker will take you to the doctor at 1:00PM',
+        message: '',
         subText: ''
       }
-    ]
+    ],
   };
 
   render() {
