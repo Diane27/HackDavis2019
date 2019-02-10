@@ -11,6 +11,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { Input } from 'react-native-elements';
 import styles from '../styles/app.scss';
 import Spinner from 'react-native-loading-spinner-overlay';
+import HeaderTitle from '../components/HeaderTitle';
 
 import * as firebase from 'firebase';
 import 'firebase/firestore';
@@ -33,6 +34,7 @@ export default class SignInScreen extends React.Component {
   render() {
     return (
       <View style={styles.welcomeContainer}>
+        <HeaderTitle />
         <Spinner
           visible={this.state.spinner}
           textContent={'Loading...'}
