@@ -1,0 +1,21 @@
+%medium {
+  font-size: 20px;
+}
+
+.card {
+  border-radius: 10px;
+}
+
+.title {
+  font-family: 'nunito';
+  @extend %medium;
+}
+
+.message {
+  font-family: 'nunito-bold';
+  font-size: 30px;
+}
+
+.subText {
+  @extend %medium;
+}
