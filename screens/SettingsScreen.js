@@ -11,15 +11,6 @@ import HeaderTitle from '../components/HeaderTitle.js';
 import styles from '../styles/home.scss';
 
 import * as firebase from 'firebase';
-import * as QRCode from 'qrcode';
-
-const generateQR = async text => {
-  try {
-    return await QRCode.toDataURL(text);
-  } catch (err) {
-    console.error(err)
-  }
-}
 
 export default class SettingsScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -58,18 +49,12 @@ export default class SettingsScreen extends React.Component {
     this.props.navigation.navigate('Auth');
   }
 
-  async render() {
-    let qrcode = []
-    let uid = await AsyncStorage.getItem('userId');
-
-    if (uid) {
-      // console.log(await generateQR(uid));
-      // qrcode.push(<Image source={{ uri: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADMAAAAzCAYAAAA6oTAqAAAAEXRFWHRTb2Z0d2FyZQBwbmdjcnVzaEB1SfMAAABQSURBVGje7dSxCQBACARB+2/ab8BEeQNhFi6WSYzYLYudDQYGBgYGBgYGBgYGBgYGBgZmcvDqYGBgmhivGQYGBgYGBgYGBgYGBgYGBgbmQw+P/eMrC5UTVAAAAABJRU5ErkJggg==' }} style={{width: 400, height: 400}} key="qr"/>);
-    }
+  render() {
 
     return (
       <View style={styles.container}>
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+          {this.state.role === 'patient' && <Image source={require('../assets/images/qrcode.png')} style={{width: 400, height: 400}} />}
           <Button title="Sign Out" onPress={this._signOut} />
         </ScrollView>
       </View>
