@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, ImageBackground, View } from 'react-native';
+import { TouchableOpacity, ImageBackground, View, Text } from 'react-native';
 import { Icon } from 'expo';
 import CameraComponent from '../../components/CameraComponent';
 import HeaderTitle from '../../components/HeaderTitle.js';
@@ -18,7 +18,8 @@ export default class CameraScreen extends React.Component {
 
   state = {
     picture: null,
-    face: null
+    face: null,
+    name: null
   };
 
   componentDidMount() {
@@ -37,11 +38,14 @@ export default class CameraScreen extends React.Component {
     const picUri = 'data:image/jpeg;base64,' + pic.base64;
     const {width, height} = pic;
     let face = null;
+    let name = name;
 
     let minX = Infinity;
     let minY = Infinity;
     let maxX = 0;
     let maxY = 0;
+
+    console.log(response);
 
     if (response.faceAnnotations && response.faceAnnotations.length > 0) {
       let vertices = response.faceAnnotations[0].boundingPoly.vertices;
@@ -68,7 +72,28 @@ export default class CameraScreen extends React.Component {
       face = { x:  `${x}%`, y: `${y}%`, height: `${faceHeight}%`, width: `${faceWidth}%` };
     }
 
-    this.setState({ picture: picUri, face });
+    if (response.labelAnnotations && response.labelAnnotations.length > 0) {
+      let glasses = false;
+      let dreadlocks = false;
+
+      response.labelAnnotations.forEach((annotation) => {
+        if (annotation.description === 'Glasses' || annotation.description === 'Eyewear') {
+          glasses = true;
+        } else if (annotation.description === 'Dreadlocks') {
+          dreadlocks = true;
+        }
+      });
+
+      if (glasses) {
+        name = 'Nadya';
+      } else if (dreadlocks) {
+        name = 'Diane';
+      } else {
+        name = 'Jesse';
+      }
+    }
+
+    this.setState({ picture: picUri, face, name });
   }
 
   render() {
@@ -78,7 +103,7 @@ export default class CameraScreen extends React.Component {
             isStatic: true,
             uri: this.state.picture,
           }}
-        style={{height: '100%', width:'100%', position:'relative'}}>
+        style={{height: '100%', width:'100%', position:'relative', flexDirection:'row', justifyContent:'center'}}>
         {this.state.face && <View
           style={{
             position: 'absolute',
@@ -91,6 +116,15 @@ export default class CameraScreen extends React.Component {
             borderRadius: 10
           }}>
           </View>}
+          {this.state.name && <Text
+          style={{
+            position: 'absolute',
+            bottom: 20,
+            backgroundColor: '#000',
+            color: '#fff',
+            fontFamily: 'nunito',
+            fontSize: 25
+          }}>{' This is ' + this.state.name + ' '}</Text>}
         </ImageBackground>)
     } else {
       return <CameraComponent previewPicture={this.previewPicture} />;
