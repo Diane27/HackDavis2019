@@ -15,7 +15,7 @@ import HomeCard from '../components/HomeCard.js';
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
-    header: null,
+    title: 'CareBuddy',
   };
 
   state = {
