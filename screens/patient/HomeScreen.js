@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { Icon } from 'expo';
 import moment from 'moment';
 
 import styles from '../../styles/home.scss';
@@ -15,9 +16,24 @@ import HomeCard from '../../components/HomeCard.js';
 import HeaderTitle from '../../components/HeaderTitle.js';
 
 export default class HomeScreen extends React.Component {
-  static navigationOptions = {
-    headerTitle: <HeaderTitle/>
+  static navigationOptions = ({ navigation }) => {
+    return {
+      headerTitle: <HeaderTitle/>,
+      headerRight: (
+        <TouchableOpacity onPress={() => navigation.getParam('goToSettings')()} style={{paddingRight:20}}>
+          <Icon.Ionicons name="md-cog" size={25} />
+        </TouchableOpacity>
+      )
+    };
   };
+
+  componentDidMount() {
+    this.props.navigation.setParams({ goToSettings: this._goToSettings });
+  }
+
+  _goToSettings = () => {
+    this.props.navigation.navigate('Settings');
+  }
 
   state = {
     cards: [
