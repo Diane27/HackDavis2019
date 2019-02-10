@@ -78,12 +78,12 @@ export default class CameraComponent extends React.Component {
 
     async takePicture() {
         if (this.camera) {
-          let picture = await this.camera.takePictureAsync({base64:true, quality:0.5})
+          let picture = await this.camera.takePictureAsync({base64:true, quality:0.5, skipProcessing:true});
+          this.camera.pausePreview();
           this.setState({image: picture}, async ()=>{
             let response = await this.uploadPicture();
             this.props.previewPicture(this.state.image, response);
-          })
-          
+          });
         }
     }
 
