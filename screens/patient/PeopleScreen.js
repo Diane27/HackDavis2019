@@ -9,9 +9,10 @@ import {
   View,
 } from 'react-native';
 import { Icon } from 'expo';
+import { Avatar } from 'react-native-elements';
 import * as firebase from 'firebase';
 
-import styles from '../../styles/home.scss';
+import styles from '../../styles/app.scss';
 import HeaderTitle from '../../components/HeaderTitle.js';
 
 export default class PeopleScreen extends React.Component {
@@ -26,11 +27,38 @@ export default class PeopleScreen extends React.Component {
     };
   };
 
+  state = {
+    me: {
+      name: '',
+      avatar: 'http://www.thecellartrust.org/wp-content/uploads/2017/04/Trustees.jpg'
+    },
+    caregivers: []
+  }
+
   async componentDidMount() {
     this.props.navigation.setParams({ goToSettings: this._goToSettings });
     const userId = await AsyncStorage.getItem('userId');
-    const result = await firebase.firestore().collection('users').doc(userId).get();
-    const name = result.get('name');
+    const getUser= await firebase.firestore().collection('users').doc(userId).get();
+    const me = getUser.data();
+
+    const getCaregivers = await firebase.firestore()
+    .collection('userToUsers')
+    .where('patient', '==', userId)
+    .get();
+
+    const caregivers = await Promise.all(getCaregivers.docs.map(async result => {
+      const getCaregiver = await firebase.firestore().collection('users').doc(result.data().caregiver).get();
+      const caregiver = getCaregiver.data();
+      caregiver.id = getCaregiver.id;
+      return caregiver;
+    }));
+
+    console.log(caregivers);
+
+    this.setState({
+      me,
+      caregivers
+    })
   }
 
   _goToSettings = () => {
@@ -40,8 +68,41 @@ export default class PeopleScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-          <Text>Hello</Text>
+        <ScrollView style={styles.peopleContainer} contentContainerStyle={styles.peopleContentContainer}>
+          <View style={{
+            borderRadius: 1000,
+            borderWidth: 75,
+            borderColor: '#6e82b7'
+          }}>
+            <Avatar
+              size="xlarge"
+              rounded
+              source={{uri: this.state.me.avatar}}
+              onPress={() => console.log("Works!")}
+              activeOpacity={0.7}
+            />
+          </View>
+        {this.state.caregivers.map((caregiver, i) => {
+            return <Avatar
+              size="large"
+              rounded
+              source={{uri: caregiver.avatar}}
+              onPress={() => console.log("Works!")}
+              activeOpacity={0.7}
+              key={caregiver.id}
+              containerStyle={{
+                borderRadius: 100,
+                borderWidth: 5,
+                borderColor: '#f492a5',
+                position: 'absolute',
+                transform: [
+                  { rotate: (360 / (this.state.caregivers.length || 1) * i).toString() + 'deg' },
+                  { translateY: 150 },
+                  { rotate: '-' + (360 / (this.state.caregivers.length || 1) * i).toString() + 'deg' }
+                ]
+              }}
+            />
+          })}
         </ScrollView>
       </View>
     );
