@@ -10,7 +10,7 @@ export default class CameraScreen extends React.Component {
       headerTitle: <HeaderTitle/>,
       headerRight: (
         <TouchableOpacity onPress={() => navigation.getParam('goToSettings')()} style={{paddingRight:20}}>
-          <Icon.Ionicons name="md-cog" size={25} />
+          <Icon.Ionicons name="md-cog" size={25} color="#6e82b7" />
         </TouchableOpacity>
       )
     };

@@ -94,4 +94,9 @@ export default createBottomTabNavigator({
   CameraStack,
   KeepsStack,
   ChatStack
+},
+{
+  tabBarOptions: {
+    activeTintColor: '#f492a5'
+  }
 });
