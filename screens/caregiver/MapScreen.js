@@ -3,10 +3,12 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  View
+  View,
+  Image
 } from 'react-native';
 import { Icon } from 'expo';
 import HeaderTitle from '../../components/HeaderTitle.js';
+import styles from '../../styles/app.scss';
 
 export default class MapScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -31,16 +33,8 @@ export default class MapScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>Map here</Text>
+        <Image source={require('../../assets/images/map.png')} style={{width: '100%', height: '100%'}} />
       </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 15,
-    backgroundColor: '#fff',
-  },
-});
