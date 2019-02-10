@@ -43,6 +43,10 @@ export default class SignInScreen extends React.Component {
           placeholder='name@email.com'
           leftIcon={{ type: 'font-awesome', name: 'user' }}
           onChangeText={(email) => this.setState({email})}
+          autoCapitalize="none"
+          autoComplete="email"
+          keyboardType="email-address"
+          returnKeyType="next"
         />
         <Input
           name="password"
