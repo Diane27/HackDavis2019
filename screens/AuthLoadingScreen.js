@@ -21,7 +21,7 @@ export default class AuthLoadingScreen extends React.Component {
     const unsub = firebase.auth().onAuthStateChanged(user => {
       unsub();
       if (user) {
-        this.props.navigation.navigate('Main');
+        this.props.navigation.navigate('Patient');
       } else {
         this.props.navigation.navigate('Auth');
       }
