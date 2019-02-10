@@ -10,8 +10,8 @@ import {
 } from 'react-native';
 import moment from 'moment';
 
-import styles from '../styles/home.scss';
-import HomeCard from '../components/HomeCard.js';
+import styles from '../../styles/home.scss';
+import HomeCard from '../../components/HomeCard.js';
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
