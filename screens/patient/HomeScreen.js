@@ -27,7 +27,7 @@ export default class HomeScreen extends React.Component {
     };
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     this.props.navigation.setParams({ goToSettings: this._goToSettings });
     const userId = await AsyncStorage.getItem('userToken');
     const result = await firebase.firestore().collection('users').doc(userId).get();
