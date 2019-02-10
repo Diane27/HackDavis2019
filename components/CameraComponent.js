@@ -3,6 +3,8 @@ import percent from 'rnative-percent'
 import { Text, View, TouchableOpacity, Platform } from 'react-native'
 import { Camera, Permissions } from 'expo'
 import Fab from './Fab'
+import Environment from "../config/environment"
+//import firebase from "../utils/firebase";
 
 export default class CameraComponent extends React.Component {
 
@@ -11,12 +13,12 @@ export default class CameraComponent extends React.Component {
  
         // Function Contructors
         this.takePicture = this.takePicture.bind(this)
-        //this.uploadPicture = this.uploadPicture.bind(this)
+        this.uploadPicture = this.uploadPicture.bind(this)
     }
     state = {
         hasCameraPermission: null,
         type: Camera.Constants.Type.back,
-        submit: false,
+        uploading: false,
     }
 
     async componentWillMount() {
@@ -75,17 +77,62 @@ export default class CameraComponent extends React.Component {
     }
 
     async takePicture() {
-        console.log("happened");
-        
         if (this.camera) {
-          let picture = await this.camera.takePictureAsync()
-            console.log(picture)
+          let picture = await this.camera.takePictureAsync({base64:true, quality:0.5})
           this.setState({
-            pic: picture
-          })
-    
-          //this.uploadPicture()
+            image: picture
+          }) 
+          this.uploadPicture()
         }
     }
+
+    uploadPicture = async () => {
+        try {
+            this.setState({ uploading: true });
+            let { image } = this.state;
+            let body = JSON.stringify({
+              requests: [
+                {
+                  features: [
+                    { type: "LABEL_DETECTION", maxResults: 10 },
+                    { type: "LANDMARK_DETECTION", maxResults: 5 },
+                    { type: "FACE_DETECTION", maxResults: 5 },
+                    { type: "LOGO_DETECTION", maxResults: 5 },
+                    { type: "TEXT_DETECTION", maxResults: 5 },
+                    { type: "DOCUMENT_TEXT_DETECTION", maxResults: 5 },
+                    { type: "SAFE_SEARCH_DETECTION", maxResults: 5 },
+                    { type: "IMAGE_PROPERTIES", maxResults: 5 },
+                    { type: "CROP_HINTS", maxResults: 5 },
+                    { type: "WEB_DETECTION", maxResults: 5 }
+                  ],
+                  image: {
+                    content: image.base64,
+                  }
+                }
+              ]
+            });
+            //console.log(` request body ${body}`)
+            let response = await fetch(
+              "https://vision.googleapis.com/v1/images:annotate?key=" +
+                Environment["GOOGLE_CLOUD_VISION_API_KEY"],
+              {
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json"
+                },
+                method: "POST",
+                body: body
+              }
+            );
+            let responseJson = await response.json();
+            //console.log(responseJson);
+            this.setState({
+              googleResponse: responseJson,
+              uploading: false
+            }, ()=> console.log(this.state.googleResponse.responses[0]));
+          } catch (error) {
+            console.log(error);
+          }
+        };
 
 }
