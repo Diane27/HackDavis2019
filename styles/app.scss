@@ -1,6 +1,6 @@
 .container {
   flex: 1;
-  background-color: #fff;
+  background-color: #faf4ef;
 }
 
 .loadingContainer {
@@ -18,4 +18,65 @@
 
 .spinnerTextStyle {
   color: #fff;
+}
+
+.peopleContainer {
+  flex: 1;
+}
+
+.peopleContentContainer {
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  flex-grow: 1;
+}
+
+.peopleCardText {
+  font-family: 'nunito';
+}
+
+.peopleCardHeading {
+  font-family: 'nunito-bold';
+  font-size: 30px;
+}
+
+%button {
+  background-color: #6e82b7;
+  border-radius: 4px;
+}
+
+.closeButton {
+  @extend %button;
+  margin-top: 25px;
+}
+
+.createButton {
+  @extend %button;
+}
+
+.cancelText {
+  font-family: 'nunito-bold';
+  color: #6e82b7;
+  font-size: 16px;
+  margin-bottom: 25px;
+}
+
+.cancelButton {
+  padding: 5px;
+}
+
+.buttonText {
+  font-family: 'nunito-bold';
+  font-size: 18px;
+}
+
+.chatUser {
+  font-family: 'nunito-bold';
+  font-size: 16px;
+}
+
+.chatText {
+  font-family: 'nunito';
+  font-size: 16px;
 }
