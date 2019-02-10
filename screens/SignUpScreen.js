@@ -67,7 +67,7 @@ export default class SignInScreen extends React.Component {
         />
         <Picker
           selectedValue={this.state.role}
-          style={{height: 50, width: 100}}
+          style={{height: 50, width: 150}}
           onValueChange={(itemValue, itemIndex) =>
             this.setState({role: itemValue})
           }>
