@@ -1,6 +1,7 @@
 import React from 'react';
+import { AsyncStorage } from 'react-native';
+import { Button } from 'react-native-elements';
 import HeaderTitle from '../components/HeaderTitle.js';
-import { Button, Text } from 'react-native-elements';
 
 import * as firebase from 'firebase';
 
