@@ -5,6 +5,7 @@ import { createStackNavigator, createBottomTabNavigator } from 'react-navigation
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/caregiver/HomeScreen';
 import MapScreen from '../screens/caregiver/MapScreen';
+import ChatScreen from '../screens/caregiver/ChatScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -38,10 +39,22 @@ MapStack.navigationOptions = {
   ),
 };
 
-export default createStackNavigator({
-  Home: HomeScreen,
-  Patient: createBottomTabNavigator({
-    HomeStack,
-    MapStack
-  })
+const ChatStack = createStackNavigator({
+  Chat: ChatScreen,
+});
+
+ChatStack.navigationOptions = {
+  tabBarLabel: 'Chat',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={Platform.OS === 'ios' ? 'ios-chatbubbles' : 'md-chatbubbles'}
+    />
+  ),
+};
+
+export default createBottomTabNavigator({
+  HomeStack,
+  MapStack,
+  ChatStack
 })
