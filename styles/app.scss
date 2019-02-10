@@ -43,9 +43,30 @@
 
 %button {
   background-color: #6e82b7;
+  border-radius: 4px;
 }
 
 .closeButton {
   @extend %button;
   margin-top: 25px;
+}
+
+.createButton {
+  @extend %button;
+}
+
+.cancelText {
+  font-family: 'nunito-bold';
+  color: #6e82b7;
+  font-size: 16px;
+  margin-bottom: 25px;
+}
+
+.cancelButton {
+  padding: 5px;
+}
+
+.buttonText {
+  font-family: 'nunito-bold';
+  font-size: 18px;
 }

@@ -117,6 +117,7 @@ export default class PeopleScreen extends React.Component {
               <Button
                 title="Close"
                 buttonStyle={styles.closeButton}
+                titleStyle={styles.buttonText}
                 onPress={() => {
                   this.setModalVisible(!this.state.modalVisible);
                 }} />
