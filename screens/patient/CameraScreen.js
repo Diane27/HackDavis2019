@@ -23,6 +23,10 @@ export default class CameraScreen extends React.Component {
 
   componentDidMount() {
     this.props.navigation.setParams({ goToSettings: this._goToSettings });
+
+    this.props.navigation.addListener('willFocus', () => {
+      this.setState({ picture: null, face: null });
+    });
   }
 
   _goToSettings = () => {

@@ -32,7 +32,7 @@ export default class CameraComponent extends React.Component {
     render () {
         const { hasCameraPermission } = this.state
         if (hasCameraPermission === null) {
-            return <View />
+            return <Text style={{color:'#f00'}}>Not loaded</Text>
         } else if (hasCameraPermission === false) {
             return <Text>No access to camera</Text>
         } else {
@@ -47,28 +47,28 @@ export default class CameraComponent extends React.Component {
                             flex: 1,
                             backgroundColor: 'transparent',
                             flexDirection: 'row',
+                            justifyContent: 'center'
                         }}>
-                        <TouchableOpacity
-                            style={{
-                            flex: 0.1,
-                            alignSelf: 'flex-end',
-                            alignItems: 'center',
-                            }}
-                            onPress={() => {
-                            this.setState({
-                                type: this.state.type === Camera.Constants.Type.back
-                                ? Camera.Constants.Type.front
-                                : Camera.Constants.Type.back,
-                            });
-                            }}>
-                            <Text
-                            style={{ fontSize: 18, marginBottom: 10, color: 'white' }}>
-                            {' '}Flip{' '}
-                            </Text>
-                        </TouchableOpacity>
-                        <Fab name={Platform.OS === 'ios' ? 'ios-camera' : 'md-camera'}
-                            onPress={this.takePicture.bind(this)}>
-                        </Fab>
+                            <TouchableOpacity
+                                style={{
+                                flex: 0.1,
+                                alignSelf: 'flex-start',
+                                }}
+                                onPress={() => {
+                                this.setState({
+                                    type: this.state.type === Camera.Constants.Type.back
+                                    ? Camera.Constants.Type.front
+                                    : Camera.Constants.Type.back,
+                                });
+                                }}>
+                                <Text
+                                style={{ fontSize: 18, marginBottom: 10, color: 'white' }}>
+                                {' '}Flip{' '}
+                                </Text>
+                            </TouchableOpacity>
+                            <Fab name={Platform.OS === 'ios' ? 'ios-camera' : 'md-camera'}
+                                onPress={this.takePicture.bind(this)}>
+                            </Fab>
                         </View>
                     </Camera>
                 </View>
