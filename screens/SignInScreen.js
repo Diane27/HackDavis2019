@@ -5,13 +5,17 @@ import {
   Text,
   View,
   Button,
-  AsyncStorage
+  AsyncStorage,
+  Alert
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Input } from 'react-native-elements';
 import styles from '../styles/app.scss';
+import Spinner from 'react-native-loading-spinner-overlay';
+import HeaderTitle from '../components/HeaderTitle';
 
 import * as firebase from 'firebase';
+import 'firebase/firestore';
 
 export default class SignInScreen extends React.Component {
   static navigationOptions = {
@@ -23,14 +27,28 @@ export default class SignInScreen extends React.Component {
     this.props = props;
   }
 
+  state = {
+    spinner: false
+  }
+
   render() {
     return (
       <View style={styles.welcomeContainer}>
+        <HeaderTitle />
+        <Spinner
+          visible={this.state.spinner}
+          textContent={'Loading...'}
+          textStyle={styles.spinnerTextStyle}
+        />
         <Input
           name="email"
           placeholder='name@email.com'
           leftIcon={{ type: 'font-awesome', name: 'user' }}
           onChangeText={(email) => this.setState({email})}
+          autoCapitalize="none"
+          autoComplete="email"
+          keyboardType="email-address"
+          returnKeyType="next"
         />
         <Input
           name="password"
@@ -47,9 +65,34 @@ export default class SignInScreen extends React.Component {
   }
 
   _signIn = async () => {
-    const { email, password } = this.state;
-    const user = firebase.auth().signInWithEmailAndPassword(email, password);
-    this.props.navigation.navigate('Main');
+    try {
+      this.setState({
+        spinner: true
+      });
+
+      const { email, password } = this.state;
+      const signin = await firebase.auth().signInWithEmailAndPassword(email, password);
+      const result = await firebase.firestore().collection('users').doc(signin.user.uid).get();
+      const role = result.data().role;
+
+      this.setState({
+        spinner: false
+      });
+
+      await AsyncStorage.setItem('userId', signin.user.uid);
+
+      if (role === 'caregiver') {
+        this.props.navigation.navigate('Caregiver');
+      } else {
+        this.props.navigation.navigate('Patient');
+      }
+    } catch (err) {
+      this.setState({
+        spinner: false
+      }, () => {
+        Alert.alert('Error', JSON.stringify(err));
+      });
+    }
   };
 
   _goToSignUp = () => {

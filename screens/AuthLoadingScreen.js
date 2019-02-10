@@ -18,10 +18,20 @@ export default class AuthLoadingScreen extends React.Component {
 
   // Fetch the token from storage then navigate to our appropriate place
   async _bootstrapAsync() {
-    const unsub = firebase.auth().onAuthStateChanged(user => {
+    const unsub = firebase.auth().onAuthStateChanged(async user => {
       unsub();
       if (user) {
-        this.props.navigation.navigate('Patient');
+        const userId = user.uid;
+        const result = await firebase.firestore().collection('users').doc(userId).get();
+        const role = result.get('role');
+
+        await AsyncStorage.setItem('userId', userId);
+
+        if (role === 'caregiver') {
+          this.props.navigation.navigate('Caregiver');
+        } else {
+          this.props.navigation.navigate('Patient');
+        }
       } else {
         this.props.navigation.navigate('Auth');
       }

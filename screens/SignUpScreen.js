@@ -11,6 +11,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { Input } from 'react-native-elements';
 import styles from '../styles/app.scss';
 import Spinner from 'react-native-loading-spinner-overlay';
+import HeaderTitle from '../components/HeaderTitle';
 
 import * as firebase from 'firebase';
 import 'firebase/firestore';
@@ -33,6 +34,7 @@ export default class SignInScreen extends React.Component {
   render() {
     return (
       <View style={styles.welcomeContainer}>
+        <HeaderTitle />
         <Spinner
           visible={this.state.spinner}
           textContent={'Loading...'}
@@ -43,12 +45,19 @@ export default class SignInScreen extends React.Component {
           placeholder='Firstname Lastname'
           leftIcon={{ type: 'font-awesome', name: 'user' }}
           onChangeText={(name) => this.setState({name})}
+          autoCapitalize="words"
+          autoComplete="name"
+          returnKeyType="next"
         />
         <Input
           name="email"
           placeholder='name@email.com'
           leftIcon={{ type: 'font-awesome', name: 'envelope' }}
           onChangeText={(email) => this.setState({email})}
+          autoCapitalize="none"
+          autoComplete="email"
+          keyboardType="email-address"
+          returnKeyType="next"
         />
         <Input
           name="password"
@@ -60,7 +69,7 @@ export default class SignInScreen extends React.Component {
         />
         <Picker
           selectedValue={this.state.role}
-          style={{height: 50, width: 100}}
+          style={{height: 50, width: 150}}
           onValueChange={(itemValue, itemIndex) =>
             this.setState({role: itemValue})
           }>

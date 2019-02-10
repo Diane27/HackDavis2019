@@ -14,6 +14,9 @@ const config = {
 };
 firebase.initializeApp(config);
 
+import {YellowBox} from 'react-native';
+YellowBox.ignoreWarnings(['Setting a timer']);
+
 export default class App extends React.Component {
   state = {
     isLoadingComplete: false,

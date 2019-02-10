@@ -7,32 +7,51 @@ import {
   Text,
   TouchableOpacity,
   View,
+  AsyncStorage
 } from 'react-native';
+import { Icon } from 'expo';
 import moment from 'moment';
+
+import * as firebase from 'firebase';
 
 import styles from '../../styles/home.scss';
 import HomeCard from '../../components/HomeCard.js';
+import HeaderTitle from '../../components/HeaderTitle.js';
 
 export default class HomeScreen extends React.Component {
-  static navigationOptions = {
-    title: 'CareBuddy',
+  static navigationOptions = ({ navigation }) => {
+    return {
+      headerTitle: <HeaderTitle/>,
+      headerRight: (
+        <TouchableOpacity onPress={() => navigation.getParam('goToSettings')()} style={{paddingRight:20}}>
+          <Icon.Ionicons name="md-cog" size={25} />
+        </TouchableOpacity>
+      )
+    };
   };
+
+  async componentDidMount() {
+    this.props.navigation.setParams({ goToSettings: this._goToSettings });
+    const userId = await AsyncStorage.getItem('userId');
+    const result = await firebase.firestore().collection('users').doc(userId).get();
+    const name = result.get('name');
+    const nameCard = this.state.cards[0];
+    nameCard.message = name;
+
+    this.setState({
+      cards: [nameCard, ...this.state.cards.slice(1)]
+    });
+  }
+
+  _goToSettings = () => {
+    this.props.navigation.navigate('Settings');
+  }
 
   state = {
     cards: [
       {
-        title: 'hello',
-        message: 'John Smith',
-        subText: ['Age: 71', '\n', 'Caretaker: ', <Text style={{fontFamily: 'nunito-bold'}} key="caretaker">Jane Doe</Text>]
-      },
-      {
-        title: 'Today is',
-        message: [moment().format('dddd h:mm A'), '\n', moment().format('D MMMM YYYY')],
-        subText: ''
-      },
-      {
-        title: 'A reminder for you:',
-        message: 'Your caretaker will take you to the doctor at 1:00PM',
+        title: 'Hello,',
+        message: '',
         subText: ''
       }
     ]

@@ -1,14 +1,20 @@
 import React from 'react';
 import {
+  AsyncStorage,
+  Image,
+  Platform,
+  ScrollView,
   Text,
   TouchableOpacity,
-  StyleSheet,
-  View
+  View,
 } from 'react-native';
 import { Icon } from 'expo';
+import * as firebase from 'firebase';
+
+import styles from '../../styles/home.scss';
 import HeaderTitle from '../../components/HeaderTitle.js';
 
-export default class MapScreen extends React.Component {
+export default class KeepsScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
       headerTitle: <HeaderTitle/>,
@@ -20,8 +26,11 @@ export default class MapScreen extends React.Component {
     };
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     this.props.navigation.setParams({ goToSettings: this._goToSettings });
+    const userId = await AsyncStorage.getItem('userId');
+    const result = await firebase.firestore().collection('users').doc(userId).get();
+    const name = result.get('name');
   }
 
   _goToSettings = () => {
@@ -31,16 +40,10 @@ export default class MapScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>Map here</Text>
+        <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+          <Text>Keeps</Text>
+        </ScrollView>
       </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 15,
-    backgroundColor: '#fff',
-  },
-});
