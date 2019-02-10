@@ -39,7 +39,7 @@ export default class CameraComponent extends React.Component {
             return (
                 <View style={{ flex: 1 }}>
                     <Camera 
-                        style={{ flex: 1 }} type={this.state.type}
+                        style={{ flex: 1 }}
                         ref={ref => (this.camera = ref)}
                         type={this.state.type}>
                         <View
@@ -79,60 +79,60 @@ export default class CameraComponent extends React.Component {
     async takePicture() {
         if (this.camera) {
           let picture = await this.camera.takePictureAsync({base64:true, quality:0.5})
-          this.setState({
-            image: picture
-          }) 
-          this.uploadPicture()
+          this.setState({image: picture}, async ()=>{
+            let response = await this.uploadPicture();
+            this.props.previewPicture(this.state.image, response);
+          })
+          
         }
     }
 
     uploadPicture = async () => {
-        try {
-            this.setState({ uploading: true });
-            let { image } = this.state;
-            let body = JSON.stringify({
-              requests: [
-                {
-                  features: [
-                    { type: "LABEL_DETECTION", maxResults: 10 },
-                    { type: "LANDMARK_DETECTION", maxResults: 5 },
-                    { type: "FACE_DETECTION", maxResults: 5 },
-                    { type: "LOGO_DETECTION", maxResults: 5 },
-                    { type: "TEXT_DETECTION", maxResults: 5 },
-                    { type: "DOCUMENT_TEXT_DETECTION", maxResults: 5 },
-                    { type: "SAFE_SEARCH_DETECTION", maxResults: 5 },
-                    { type: "IMAGE_PROPERTIES", maxResults: 5 },
-                    { type: "CROP_HINTS", maxResults: 5 },
-                    { type: "WEB_DETECTION", maxResults: 5 }
-                  ],
-                  image: {
-                    content: image.base64,
+        return new Promise(async (resolve, reject) => {
+            try {
+                this.setState({ uploading: true });
+                let { image } = this.state;
+                let body = JSON.stringify({
+                  requests: [
+                    {
+                      features: [
+                        { type: "LABEL_DETECTION", maxResults: 10 },
+                        { type: "FACE_DETECTION", maxResults: 5 },
+                        { type: "CROP_HINTS", maxResults: 5 },
+                      ],
+                      image: {
+                        content: image.base64,
+                      }
+                    }
+                  ]
+                });
+                //console.log(` request body ${body}`)
+                let response = await fetch(
+                  "https://vision.googleapis.com/v1/images:annotate?key=" +
+                    Environment["GOOGLE_CLOUD_VISION_API_KEY"],
+                  {
+                    headers: {
+                      Accept: "application/json",
+                      "Content-Type": "application/json"
+                    },
+                    method: "POST",
+                    body: body
                   }
-                }
-              ]
-            });
-            //console.log(` request body ${body}`)
-            let response = await fetch(
-              "https://vision.googleapis.com/v1/images:annotate?key=" +
-                Environment["GOOGLE_CLOUD_VISION_API_KEY"],
-              {
-                headers: {
-                  Accept: "application/json",
-                  "Content-Type": "application/json"
-                },
-                method: "POST",
-                body: body
+                );
+                let responseJson = await response.json();
+                //console.log(responseJson);
+                this.setState({
+                  googleResponse: responseJson.responses[0],
+                  uploading: false
+                }, ()=> {
+                    // console.log(this.state.googleResponse);
+                    resolve(this.state.googleResponse);
+                });
+              } catch (error) {
+                console.log(error);
+                reject(error);
               }
-            );
-            let responseJson = await response.json();
-            //console.log(responseJson);
-            this.setState({
-              googleResponse: responseJson,
-              uploading: false
-            }, ()=> console.log(this.state.googleResponse.responses[0]));
-          } catch (error) {
-            console.log(error);
-          }
+        });
         };
 
 }
