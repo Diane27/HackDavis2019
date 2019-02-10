@@ -4,11 +4,13 @@ import {
   View,
   Button,
   AsyncStorage,
-  Picker
+  Picker,
+  Alert
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Input } from 'react-native-elements';
 import styles from '../styles/app.scss';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 import * as firebase from 'firebase';
 import 'firebase/firestore';
@@ -24,12 +26,18 @@ export default class SignInScreen extends React.Component {
   }
 
   state = {
-    role: 'caregiver'
+    role: 'caregiver',
+    spinner: false
   };
 
   render() {
     return (
       <View style={styles.welcomeContainer}>
+        <Spinner
+          visible={this.state.spinner}
+          textContent={'Loading...'}
+          textStyle={styles.spinnerTextStyle}
+        />
         <Input
           name="name"
           placeholder='Firstname Lastname'
@@ -66,6 +74,10 @@ export default class SignInScreen extends React.Component {
 
   _signUp = async () => {
     try {
+      this.setState({
+        spinner: true
+      });
+
       const { name, email, password, role } = this.state;
 
       if (!name || !email || !password || !role) {
@@ -81,9 +93,18 @@ export default class SignInScreen extends React.Component {
         role
       });
 
-      this.props.navigation.navigate('Auth');
+      this.setState({
+        spinner: false
+      });
+
+      this.props.navigation.navigate('SignIn');
     } catch (err) {
-      console.error(err);
+      this.setState({
+        spinner: false
+      }, () => {
+        Alert.alert('Error', JSON.stringify(err));
+        this.props.navigation.navigate('SignIn');
+      });
     }
   };
 }

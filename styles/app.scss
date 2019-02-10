@@ -1,4 +1,4 @@
-container {
+.container {
   flex: 1;
   background-color: #fff;
 }
@@ -14,4 +14,8 @@ container {
   flex: 1;
   justify-content: center;
   align-items: center;
+}
+
+.spinnerTextStyle {
+  color: #fff;
 }
