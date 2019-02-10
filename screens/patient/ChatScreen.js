@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import { Icon } from 'expo';
-import { Card, ListItem, Button, Avatar } from 'react-native-elements';
+import { Card, ListItem, Button, Avatar, Input } from 'react-native-elements';
 import * as firebase from 'firebase';
 
 import styles from '../../styles/app.scss';
@@ -28,13 +28,21 @@ export default class ChatScreen extends React.Component {
   };
 
   state = {
-    chats: []
+    userId: '',
+    chats: [],
+    newChat: ''
   }
 
   async componentDidMount() {
     this.props.navigation.setParams({ goToSettings: this._goToSettings });
     const userId = await AsyncStorage.getItem('userId');
-    const result = await firebase.firestore().collection('users').doc(userId).get();
+    this.setState({
+      userId
+    })
+    this.getChats();
+  }
+
+  getChats = async () => {
     const getChats = await firebase.firestore().collection('chats').get();
 
     const chats = await Promise.all(getChats.docs.map(async result => {
@@ -46,11 +54,29 @@ export default class ChatScreen extends React.Component {
 
     this.setState({
       chats
-    })
+    });
   }
 
   _goToSettings = () => {
     this.props.navigation.navigate('Settings');
+  }
+
+  sendChat = async () => {
+    const { userId, newChat } = this.state;
+
+    await firebase.firestore()
+    .collection('chats')
+    .doc()
+    .set({
+      user: userId,
+      text: newChat
+    });
+
+    this.setState({
+      newChat: ''
+    }, () => {
+      this.getChats();
+    });
   }
 
   render() {
@@ -75,6 +101,19 @@ export default class ChatScreen extends React.Component {
             }
           </Card>
         </ScrollView>
+        <View style={styles.chatBar}>
+          <View style={{flex:1}}>
+            <Input
+              name="newChat"
+              placeholder='Hello...'
+              onChangeText={(newChat) => this.setState({newChat})}
+              value={this.state.newChat}
+            />
+          </View>
+          <View>
+            <Button title="Send" onPress={this.sendChat} buttonStyle={styles.createButton} />
+          </View>
+        </View>
       </View>
     );
   }
