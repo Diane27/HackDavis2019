@@ -31,3 +31,21 @@
   text-align: center;
   flex-grow: 1;
 }
+
+.peopleCardText {
+  font-family: 'nunito';
+}
+
+.peopleCardHeading {
+  font-family: 'nunito-bold';
+  font-size: 30px;
+}
+
+%button {
+  background-color: #6e82b7;
+}
+
+.closeButton {
+  @extend %button;
+  margin-top: 25px;
+}

@@ -7,9 +7,10 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Modal
 } from 'react-native';
 import { Icon } from 'expo';
-import { Avatar } from 'react-native-elements';
+import { Button, Avatar } from 'react-native-elements';
 import * as firebase from 'firebase';
 
 import styles from '../../styles/app.scss';
@@ -32,7 +33,9 @@ export default class PeopleScreen extends React.Component {
       name: '',
       avatar: 'http://www.thecellartrust.org/wp-content/uploads/2017/04/Trustees.jpg'
     },
-    caregivers: []
+    caregivers: [],
+    modalVisible: false,
+    selectedCaregiver: {}
   }
 
   async componentDidMount() {
@@ -50,6 +53,7 @@ export default class PeopleScreen extends React.Component {
       const getCaregiver = await firebase.firestore().collection('users').doc(result.data().caregiver).get();
       const caregiver = getCaregiver.data();
       caregiver.id = getCaregiver.id;
+      caregiver.note = result.data().note || '';
       return caregiver;
     }));
 
@@ -63,9 +67,63 @@ export default class PeopleScreen extends React.Component {
     this.props.navigation.navigate('Settings');
   }
 
+  _openCaregiver = (index) => {
+    this.setState({
+      selectedCaregiver: this.state.caregivers[index]
+    }, () => {
+      this.setState({ modalVisible: true });
+    });
+  }
+
+  setModalVisible(visible) {
+    this.setState({modalVisible: visible});
+  }
+
   render() {
     return (
       <View style={styles.container}>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={this.state.modalVisible}
+          onRequestClose={() => console.log('ey')}
+        >
+          <View style={{
+              flex: 1,
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: '#00000080'
+            }}>
+            <View style={{
+                height: 300,
+                width: 300,
+                borderRadius: 25,
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: '#fff'
+              }}>
+
+              <Avatar
+                size="xlarge"
+                rounded
+                source={{uri: this.state.selectedCaregiver.avatar}}
+                activeOpacity={0.7}
+              />
+            <Text style={styles.peopleCardHeading}>{this.state.selectedCaregiver.name}</Text>
+            <Text style={styles.peopleCardText}>{this.state.selectedCaregiver.note}</Text>
+
+              <Button
+                title="Close"
+                buttonStyle={styles.closeButton}
+                onPress={() => {
+                  this.setModalVisible(!this.state.modalVisible);
+                }} />
+            </View>
+          </View>
+        </Modal>
+
         <ScrollView style={styles.peopleContainer} contentContainerStyle={styles.peopleContentContainer}>
           <View style={{
             borderRadius: 1000,
@@ -98,7 +156,7 @@ export default class PeopleScreen extends React.Component {
               size="large"
               rounded
               source={{uri: caregiver.avatar}}
-              onPress={() => console.log("Works!")}
+              onPress={() => this._openCaregiver(i)}
               activeOpacity={0.7}
             />
           </View>
