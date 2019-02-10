@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { Icon } from 'expo';
 import moment from 'moment';
+import * as firebase from 'firebase';
 
 import styles from '../../styles/home.scss';
 import HomeCard from '../../components/HomeCard.js';
