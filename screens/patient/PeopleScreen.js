@@ -53,8 +53,6 @@ export default class PeopleScreen extends React.Component {
       return caregiver;
     }));
 
-    console.log(caregivers);
-
     this.setState({
       me,
       caregivers
@@ -83,25 +81,28 @@ export default class PeopleScreen extends React.Component {
             />
           </View>
         {this.state.caregivers.map((caregiver, i) => {
-            return <Avatar
+          return <View
+            key={caregiver.id}
+            style={{
+            borderRadius: 100,
+            borderWidth: 5,
+            borderColor: '#f492a5',
+            position: 'absolute',
+            transform: [
+              { rotate: (360 / (this.state.caregivers.length || 1) * i).toString() + 'deg' },
+              { translateY: 150 },
+              { rotate: '-' + (360 / (this.state.caregivers.length || 1) * i).toString() + 'deg' }
+            ]
+          }}>
+            <Avatar
               size="large"
               rounded
               source={{uri: caregiver.avatar}}
               onPress={() => console.log("Works!")}
               activeOpacity={0.7}
-              key={caregiver.id}
-              containerStyle={{
-                borderRadius: 100,
-                borderWidth: 5,
-                borderColor: '#f492a5',
-                position: 'absolute',
-                transform: [
-                  { rotate: (360 / (this.state.caregivers.length || 1) * i).toString() + 'deg' },
-                  { translateY: 150 },
-                  { rotate: '-' + (360 / (this.state.caregivers.length || 1) * i).toString() + 'deg' }
-                ]
-              }}
             />
+          </View>
+            return
           })}
         </ScrollView>
       </View>
