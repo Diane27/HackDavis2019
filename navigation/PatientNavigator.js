@@ -4,8 +4,10 @@ import { createStackNavigator, createBottomTabNavigator } from 'react-navigation
 
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/patient/HomeScreen';
+import PeopleScreen from '../screens/patient/PeopleScreen';
 import CameraScreen from '../screens/patient/CameraScreen';
-import SettingsScreen from '../screens/SettingsScreen';
+import KeepsScreen from '../screens/patient/KeepsScreen';
+import ChatScreen from '../screens/patient/ChatScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -25,6 +27,24 @@ HomeStack.navigationOptions = {
   ),
 };
 
+const PeopleStack = createStackNavigator({
+  People: PeopleScreen,
+});
+
+PeopleStack.navigationOptions = {
+  tabBarLabel: 'People',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={
+        Platform.OS === 'ios'
+          ? `ios-people${focused ? '' : '-outline'}`
+          : 'md-people'
+      }
+    />
+  ),
+};
+
 const CameraStack = createStackNavigator({
   Camera: CameraScreen,
 });
@@ -39,22 +59,39 @@ CameraStack.navigationOptions = {
   ),
 };
 
-const SettingsStack = createStackNavigator({
-  Settings: SettingsScreen,
+const KeepsStack = createStackNavigator({
+  Keeps: KeepsScreen,
 });
 
-SettingsStack.navigationOptions = {
-  tabBarLabel: 'Settings',
+KeepsStack.navigationOptions = {
+  tabBarLabel: 'Keeps',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'}
+      name={Platform.OS === 'ios' ? 'ios-cube' : 'md-cube'}
     />
   ),
 };
 
+const ChatStack = createStackNavigator({
+  Chat: ChatScreen,
+});
+
+ChatStack.navigationOptions = {
+  tabBarLabel: 'Chat',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={Platform.OS === 'ios' ? 'ios-chatbubbles' : 'md-chatbubbles'}
+    />
+  ),
+};
+
+
 export default createBottomTabNavigator({
   HomeStack,
+  PeopleStack,
   CameraStack,
-  SettingsStack,
+  KeepsStack,
+  ChatStack
 });

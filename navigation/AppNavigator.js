@@ -1,5 +1,5 @@
 import React from 'react';
-import { createAppContainer, createSwitchNavigator } from 'react-navigation';
+import { createAppContainer, createSwitchNavigator, createStackNavigator } from 'react-navigation';
 
 import CaregiverNavigator from './CaregiverNavigator';
 import PatientNavigator from './PatientNavigator';
@@ -14,7 +14,9 @@ export default createAppContainer(createSwitchNavigator(
     Auth: AuthNavigator,
     Patient: PatientNavigator,
     Caregiver: CaregiverNavigator,
-    Settings: SettingsScreen
+    Settings: createStackNavigator({
+      Settings: SettingsScreen
+    })
   },
   {
     initialRouteName: 'AuthLoading'
