@@ -49,7 +49,6 @@ export default class SignInScreen extends React.Component {
   _signIn = async () => {
     const { email, password } = this.state;
     const user = firebase.auth().signInWithEmailAndPassword(email, password);
-    console.log(user);
     this.props.navigation.navigate('Main');
   };
 
