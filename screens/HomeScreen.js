@@ -21,18 +21,18 @@ export default class HomeScreen extends React.Component {
   state = {
     cards: [
       {
-        super: 'hello',
-        title: 'John Smith',
-        subText: ['Age: 71', '\n', 'Caretaker: Jane Doe']
+        title: 'hello',
+        message: 'John Smith',
+        subText: ['Age: 71', '\n', 'Caretaker: ', <Text style={{fontFamily: 'nunito-bold'}} key="caretaker">Jane Doe</Text>]
       },
       {
-        super: 'Today is',
-        title: [moment().format('dddd h:mm A'), '\n', moment().format('D MMMM YYYY')],
+        title: 'Today is',
+        message: [moment().format('dddd h:mm A'), '\n', moment().format('D MMMM YYYY')],
         subText: ''
       },
       {
-        super: 'A reminder for you:',
-        title: 'Your caretaker will take you to the doctor at 1:00PM',
+        title: 'A reminder for you:',
+        message: 'Your caretaker will take you to the doctor at 1:00PM',
         subText: ''
       }
     ]
