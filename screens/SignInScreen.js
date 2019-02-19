@@ -71,7 +71,9 @@ export default class SignInScreen extends React.Component {
       });
 
       const { email, password } = this.state;
-      const signin = await firebase.auth().signInWithEmailAndPassword(email, password);
+      const signin = await firebase.auth().signInWithEmailAndPassword(email, password).catch(function(err){
+        console.log(err.message);
+      });
       const result = await firebase.firestore().collection('users').doc(signin.user.uid).get();
       const role = result.data().role;
 

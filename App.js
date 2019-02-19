@@ -2,15 +2,16 @@ import React from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { AppLoading, Asset, Font, Icon } from 'expo';
 import AppNavigator from './navigation/AppNavigator';
+import { FIREBASE_API_KEY, AUTH_DOMAIN, DATABASE_URL, FIREBASE_PROJECT_ID,STORAGE_BUCKET, MESSAGE_ID } from 'react-native-dotenv';
 
 import * as firebase from 'firebase';
 const config = {
-  apiKey: "AIzaSyBNTO4TgtG5iCqgj1AEdgaKTqA-GY5t36Y",
-  authDomain: "carebuddy-17dd3.firebaseapp.com",
-  databaseURL: "https://carebuddy-17dd3.firebaseio.com",
-  projectId: "carebuddy",
-  storageBucket: "carebuddy.appspot.com",
-  messagingSenderId: "781280855433"
+  apiKey: FIREBASE_API_KEY,
+  authDomain: AUTH_DOMAIN,
+  databaseURL: DATABASE_URL,
+  projectId: FIREBASE_PROJECT_ID,
+  storageBucket: STORAGE_BUCKET,
+  messagingSenderId: MESSAGE_ID
 };
 firebase.initializeApp(config);
 
