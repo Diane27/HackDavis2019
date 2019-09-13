@@ -5,7 +5,7 @@ import {
   View,
   ScrollView
 } from 'react-native';
-import { Button } from 'react-native-elements';
+import { Button, Image } from 'react-native-elements';
 import { Icon } from 'expo';
 import HeaderTitle from '../components/HeaderTitle.js';
 import styles from '../styles/home.scss';
@@ -50,9 +50,11 @@ export default class SettingsScreen extends React.Component {
   }
 
   render() {
+
     return (
       <View style={styles.container}>
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+          {this.state.role === 'patient' && <Image source={require('../assets/images/qrcode.png')} style={{width: 400, height: 400}} />}
           <Button title="Sign Out" onPress={this._signOut} />
         </ScrollView>
       </View>
